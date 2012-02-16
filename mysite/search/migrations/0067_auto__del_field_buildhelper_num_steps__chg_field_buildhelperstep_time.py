@@ -12,7 +12,11 @@ class Migration(SchemaMigration):
         db.delete_column('search_buildhelper', 'num_steps')
 
         # Changing field 'BuildhelperStep.time'
-        db.alter_column('search_buildhelperstep', 'time', self.gf('django.db.models.fields.IntegerField')())
+        if db.backend_name == 'postgres':
+            # South can't handle the time -> int
+           db.execute('ALTER TABLE search_buildhelperstep ALTER COLUMN time TYPE int USING EXTRACT(EPOCH from time);')
+        else:
+            db.alter_column('search_buildhelperstep', 'time', self.gf('django.db.models.fields.IntegerField')())
 
 
     def backwards(self, orm):
@@ -21,7 +25,11 @@ class Migration(SchemaMigration):
         db.add_column('search_buildhelper', 'num_steps', self.gf('django.db.models.fields.IntegerField')(default=0), keep_default=False)
 
         # Changing field 'BuildhelperStep.time'
-        db.alter_column('search_buildhelperstep', 'time', self.gf('django.db.models.fields.TimeField')())
+        if db.backend_name == 'postgres':
+            # South can't handle the time -> int
+           db.execute('ALTER TABLE search_buildhelperstep ALTER COLUMN time TYPE time without time zone USING (time + 982384720) * INTERVAL \'1 second\';')
+        else:
+            db.alter_column('search_buildhelperstep', 'time', self.gf('django.db.models.fields.TimeField')())
 
 
     models = {

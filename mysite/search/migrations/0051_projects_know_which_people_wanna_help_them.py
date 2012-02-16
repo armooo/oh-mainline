@@ -20,6 +20,9 @@ from django.db import models
 from mysite.search.models import *
 
 class Migration:
+    depends_on = (
+        ('profile', '0001_initial'),
+    )
     
     def forwards(self, orm):
         

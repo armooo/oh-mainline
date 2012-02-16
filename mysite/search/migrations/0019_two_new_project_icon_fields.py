@@ -28,16 +28,6 @@ class Migration:
     no_dry_run = True
 
     def forwards(self, orm):
-        
-        try:
-            # Adding field 'Bug.bize_size_tag_name'
-            db.add_column('search_bug', 'bize_size_tag_name', orm['search.bug:bize_size_tag_name'])
-        except OperationalError, args:
-            if args[0] == 1060:
-                pass
-            else:
-                raise
-        
         # Adding field 'Project.icon_raw'
         db.add_column('search_project', 'icon_raw', orm['search.project:icon_raw'])
         

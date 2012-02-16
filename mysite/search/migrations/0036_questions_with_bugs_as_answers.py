@@ -37,7 +37,13 @@ class Migration:
         
         # Changing field 'ProjectInvolvementQuestion.is_bug_style'
         # (to signature: django.db.models.fields.BooleanField(default=False, blank=True))
-        db.alter_column('search_projectinvolvementquestion', 'is_bug_style', orm['search.projectinvolvementquestion:is_bug_style'])
+        if db.backend_name == 'postgres':
+            # South can't handle the int -> bool
+            db.execute('ALTER TABLE search_projectinvolvementquestion ALTER COLUMN is_bug_style DROP DEFAULT;')
+            db.execute('ALTER TABLE search_projectinvolvementquestion ALTER COLUMN is_bug_style TYPE boolean USING CAST(is_bug_style as BOOL);')
+            db.execute('ALTER TABLE search_projectinvolvementquestion ALTER COLUMN is_bug_style SET DEFAULT False;')
+        else:
+            db.alter_column('search_projectinvolvementquestion', 'is_bug_style', orm['search.projectinvolvementquestion:is_bug_style'])
         
         # Changing field 'Answer.author'
         # (to signature: django.db.models.fields.related.ForeignKey(to=orm['auth.User']))
@@ -52,7 +58,13 @@ class Migration:
         
         # Changing field 'ProjectInvolvementQuestion.is_bug_style'
         # (to signature: django.db.models.fields.IntegerField(default=0))
-        db.alter_column('search_projectinvolvementquestion', 'is_bug_style', orm['search.projectinvolvementquestion:is_bug_style'])
+        if db.backend_name == 'postgres':
+            # South can't handle the bool -> int
+            db.execute('ALTER TABLE search_projectinvolvementquestion ALTER COLUMN is_bug_style DROP DEFAULT;')
+            db.execute('ALTER TABLE search_projectinvolvementquestion ALTER COLUMN is_bug_style TYPE int USING CAST(is_bug_style as INT);')
+            db.execute('ALTER TABLE search_projectinvolvementquestion ALTER COLUMN is_bug_style SET DEFAULT 0;')
+        else:
+            db.alter_column('search_projectinvolvementquestion', 'is_bug_style', orm['search.projectinvolvementquestion:is_bug_style'])
         
         # Changing field 'Answer.author'
         # (to signature: django.db.models.fields.related.ForeignKey(to=orm['auth.User'], null=True))
