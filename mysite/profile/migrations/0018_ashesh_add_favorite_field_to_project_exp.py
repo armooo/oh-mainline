@@ -24,7 +24,7 @@ class Migration:
     def forwards(self, orm):
         
         # Adding field 'ProjectExp.favorite'
-        db.add_column('profile_projectexp', 'favorite', models.BooleanField(default=0))
+        db.add_column('profile_projectexp', 'favorite', models.BooleanField(default=False))
         
         # Changing field 'Person.time_record_was_created'
         db.alter_column('profile_person', 'time_record_was_created', models.DateTimeField(default=datetime.datetime(2009, 6, 22, 13, 44, 56, 410251)))
@@ -97,7 +97,7 @@ class Migration:
         'profile.projectexp': {
             'Meta': {'unique_together': "[('person','project'),]"},
             'description': ('models.TextField', [], {}),
-            'favorite': ('models.BooleanField', [], {'default': '0'}),
+            'favorite': ('models.BooleanField', [], {'default': 'False'}),
             'id': ('models.AutoField', [], {'primary_key': 'True'}),
             'last_touched': ('models.DateTimeField', [], {'null': 'True'}),
             'man_months': ('models.PositiveIntegerField', [], {'null': 'True'}),

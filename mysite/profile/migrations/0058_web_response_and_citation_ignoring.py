@@ -20,6 +20,10 @@ from django.db import models
 from mysite.profile.models import *
 
 class Migration:
+
+    depends_on = (
+        ('customs', '0001_webresponse'),
+    )
     
     def forwards(self, orm):
         
