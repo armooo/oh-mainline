@@ -3,4 +3,4 @@ python:
     - 2.6
     - 2.7
 install:
-script: manage.py test
+script: ./manage.py test
